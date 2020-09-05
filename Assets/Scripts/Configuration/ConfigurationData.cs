@@ -16,6 +16,17 @@ public class ConfigurationData
     // configuration data
     float paddleMoveUnitsPerSecond = 10;
     float ballImpulseForce = 200;
+    float ballLifeSeconds = 10;
+    float minSpawnSeconds = 5;
+    float maxSpawnSeconds = 10;
+    int standardBlockPoints = 1;
+    int bonusBlockPoints = 2;
+    int pickupBlockPoints = 5;
+    float standardBlockProbability = 0.7f;
+    float bonusBlockProbability = 0.2f;
+    float freezerBlockProbability = 0.05f;
+    float speedupBlockProbability = 0.05f;
+    int ballsPerGame = 5;
 
     #endregion
 
@@ -36,7 +47,110 @@ public class ConfigurationData
     /// <value>impulse force</value>
     public float BallImpulseForce
     {
-        get { return ballImpulseForce; }    
+        get { return ballImpulseForce; }
+    }
+
+    /// <summary>
+    /// Gets the number of seconds the ball lives
+    /// </summary>
+    /// <value>ball life seconds</value>
+    public float BallLifeSeconds
+    {
+        get { return ballLifeSeconds; }
+    }
+
+    /// <summary>
+    /// Gets the minimum number of seconds for a ball spawn
+    /// </summary>
+    /// <value>minimum spawn seconds</value>
+    public float MinSpawnSeconds
+    {
+        get { return minSpawnSeconds; }    
+    }
+
+    /// <summary>
+    /// Gets the maximum number of seconds for a ball spawn
+    /// </summary>
+    /// <value>maximum spawn seconds</value>
+    public float MaxSpawnSeconds
+    {
+        get { return maxSpawnSeconds; }    
+    }
+
+    /// <summary>
+    /// Gets the number of points a standard block is worth
+    /// </summary>
+    /// <value>standard block points</value>
+    public int StandardBlockPoints
+    {
+        get { return standardBlockPoints; }    
+    }
+
+    /// <summary>
+    /// Gets the number of points a bonus block is worth
+    /// </summary>
+    /// <value>bonus block points</value>
+    public int BonusBlockPoints
+    {
+        get { return bonusBlockPoints; }    
+    }
+        
+    /// <summary>
+    /// Gets the number of points a pickup block is worth
+    /// </summary>
+    /// <value>pickup block points</value>
+    public int PickupBlockPoints
+    {
+        get { return pickupBlockPoints; }    
+    }
+
+    /// <summary>
+    /// Gets the probability that a standard block
+    /// will be added to the level
+    /// </summary>
+    /// <value>standard block probability</value>
+    public float StandardBlockProbability
+    {
+        get { return standardBlockProbability; }    
+    }
+        
+    /// <summary>
+    /// Gets the probability that a bonus block
+    /// will be added to the level
+    /// </summary>
+    /// <value>bonus block probability</value>
+    public float BonusBlockProbability
+    {
+        get { return bonusBlockProbability; }    
+    }
+
+    /// <summary>
+    /// Gets the probability that a freezer block
+    /// will be added to the level
+    /// </summary>
+    /// <value>freezer block probability</value>
+    public float FreezerBlockProbability
+    {
+        get { return freezerBlockProbability; }    
+    }
+
+    /// <summary>
+    /// Gets the probability that a speedup block
+    /// will be added to the level
+    /// </summary>
+    /// <value>speedup block probability</value>
+    public float SpeedupBlockProbability
+    {
+        get { return speedupBlockProbability; }    
+    }
+
+    /// <summary>
+    /// Gets the number of balls per game
+    /// </summary>
+    /// <value>balls per game</value>
+    public int BallsPerGame
+    {
+        get { return ballsPerGame; }    
     }
 
     #endregion
@@ -70,7 +184,7 @@ public class ConfigurationData
         {
         }
         finally
-        {               
+        {
             // always close input file
             if (input != null)
             {
@@ -79,6 +193,7 @@ public class ConfigurationData
         }
     }
 
+    #endregion
 
     /// <summary>
     /// Sets the configuration data fields from the provided
@@ -91,10 +206,19 @@ public class ConfigurationData
         // values appear in the string. We could do something more
         // complicated with the names and values, but that's not
         // necessary here
-        string[] values = csvValues.Split(','); 
+        string[] values = csvValues.Split(',');
         paddleMoveUnitsPerSecond = float.Parse(values[0]);
         ballImpulseForce = float.Parse(values[1]);
+        ballLifeSeconds = float.Parse(values[2]);
+        minSpawnSeconds = float.Parse(values[3]);
+        maxSpawnSeconds = float.Parse(values[4]);
+        standardBlockPoints = int.Parse(values[5]);
+        bonusBlockPoints = int.Parse(values[6]);
+        pickupBlockPoints = int.Parse(values[7]);
+        standardBlockProbability = float.Parse(values[8]) / 100;
+        bonusBlockProbability = float.Parse(values[9]) / 100;
+        freezerBlockProbability = float.Parse(values[10]) / 100;
+        speedupBlockProbability = float.Parse(values[11]) / 100;
+        ballsPerGame = int.Parse(values[12]);
     }
-
-    #endregion
 }

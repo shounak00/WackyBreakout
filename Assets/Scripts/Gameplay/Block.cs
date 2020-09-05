@@ -7,12 +7,14 @@ using UnityEngine;
 /// </summary>
 public class Block : MonoBehaviour
 {
+    protected int points;
+
 	/// <summary>
 	/// Use this for initialization
 	/// </summary>
 	void Start()
 	{
-		
+
 	}
 	
 	/// <summary>
@@ -31,6 +33,7 @@ public class Block : MonoBehaviour
     {
         if (coll.gameObject.CompareTag("Ball"))
         {
+            HUD.AddPoints(points);
             Destroy(gameObject);
         }
     }
