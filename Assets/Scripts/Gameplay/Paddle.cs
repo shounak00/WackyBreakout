@@ -15,25 +15,38 @@ public class Paddle : MonoBehaviour
     // aiming support
     const float BounceAngleHalfRange = 60 * Mathf.Deg2Rad;
 
-	/// <summary>
-	/// Use this for initialization
-	/// </summary>
-	void Start()
-	{
+    // freezer effect support
+    bool frozen = false;
+    Timer freezeTimer;
+
+    /// <summary>
+    /// Use this for initialization
+    /// </summary>
+    void Start()
+    {
         // save for efficiency
         rb2d = GetComponent<Rigidbody2D>();
         BoxCollider2D bc2d = GetComponent<BoxCollider2D>();
         halfColliderWidth = bc2d.size.x / 2;
         halfColliderHeight = bc2d.size.y / 2;
-	}
-	
-	/// <summary>
-	/// Update is called once per frame
-	/// </summary>
-	void Update()
-	{
-		
-	}
+
+        // freezer effect support
+        freezeTimer = gameObject.AddComponent<Timer>();
+        EventManager.AddFreezerEffectListener(HandleFreezerEffectActivatedEvent);
+    }
+
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    void Update()
+    {
+        // unfreeze as appropriate
+        if (freezeTimer.Finished)
+        {
+            frozen = false;
+            freezeTimer.Stop();
+        }
+    }
 
     /// <summary>
     /// FixedUpdate is called 50 times per second
@@ -42,7 +55,8 @@ public class Paddle : MonoBehaviour
     {
         // move for horizontal input
         float horizontalInput = Input.GetAxis("Horizontal");
-        if (horizontalInput != 0)
+        if (!frozen &&
+            horizontalInput != 0)
         {
             Vector2 position = rb2d.position;
             position.x += horizontalInput * ConfigurationUtils.PaddleMoveUnitsPerSecond *
@@ -88,7 +102,7 @@ public class Paddle : MonoBehaviour
             float angleOffset = normalizedBallOffset * BounceAngleHalfRange;
             float angle = Mathf.PI / 2 + angleOffset;
             Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-      
+
             // tell ball to set direction to new direction
             Ball ballScript = coll.gameObject.GetComponent<Ball>();
             ballScript.SetDirection(direction);
@@ -107,5 +121,24 @@ public class Paddle : MonoBehaviour
         // on top collisions, both contact points are at the same y location
         ContactPoint2D[] contacts = coll.contacts;
         return Mathf.Abs(contacts[0].point.y - contacts[1].point.y) < tolerance;
+    }
+
+    /// <summary>
+    /// Handles the FreezerEffectActivated event
+    /// </summary>
+    /// <param name="duration">duration of the freezer effect</param>
+    void HandleFreezerEffectActivatedEvent(float duration)
+    {
+        // freeze paddle and run or add time to timer
+        frozen = true;
+        if (!freezeTimer.Running)
+        {
+            freezeTimer.Duration = duration;
+            freezeTimer.Run();
+        }
+        else
+        {
+            freezeTimer.AddTime(duration);
+        }
     }
 }
